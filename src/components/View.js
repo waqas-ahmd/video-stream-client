@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { styles } from "../styles";
 import axios from "axios";
 
-const API_ENDPOINT = "http://localhost:5001";
+const API_ENDPOINT = process.env.NODE_ENV === "production" ? "https://intense-tor-63737.herokuapp.com" : "http://localhost:5001";
 
 const View = ({ home }) => {
   const [id, setId] = useState("");

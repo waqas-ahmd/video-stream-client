@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import { styles } from "../styles";
-const API_ENDPOINT = "http://localhost:5001";
+const API_ENDPOINT = process.env.NODE_ENV === "production" ? "https://intense-tor-63737.herokuapp.com" : "http://localhost:5001";
 
 const Stream = ({ home }) => {
   var streamRef = useRef();
