@@ -5,20 +5,19 @@ import axios from "axios";
 const API_ENDPOINT = process.env.NODE_ENV === "production" ? "https://intense-tor-63737.herokuapp.com" : "http://localhost:5001";
 
 const View = ({ home }) => {
+  const [streamStarted, setStreamStarted] = useState(false)
   const [id, setId] = useState("");
   var viewRef = useRef();
   const view = () => {
+    setStreamStarted(true)
     const peer = createPeer();
     peer.addTransceiver("video", { direction: "recvonly" });
   };
 
   function createPeer() {
-    const peer = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.stunprotocol.org" }],
-    });
+    const peer = new RTCPeerConnection({iceServers: [{ urls: "stun:stun.stunprotocol.org" }]});
     peer.ontrack = handleTrackEvent;
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
-
     return peer;
   }
 
@@ -30,20 +29,21 @@ const View = ({ home }) => {
       payload,
       id,
     });
-    console.log(data)
     const desc = new RTCSessionDescription(data.sdp);
     peer.setRemoteDescription(desc).catch((e) => console.log(e));
   }
 
   function handleTrackEvent(e) {
+    console.log(e.streams[0])
     viewRef.current.srcObject = e.streams[0];
   }
 
   return (
     <div style={styles.screen}>
-      <div style={styles.video}>
+      {streamStarted && <div style={styles.video}>
         <video autoPlay ref={viewRef} />
-      </div>
+      </div>}
+      
       <input
         style={styles.input}
         value={id}
@@ -53,9 +53,9 @@ const View = ({ home }) => {
       <button onClick={view} style={styles.button}>
         VIEW
       </button>
-      <button onClick={home} style={styles.button}>
-        Home
-      </button>
+      <div onClick={home} style={styles.back}>
+          Back
+      </div>
     </div>
   );
 };

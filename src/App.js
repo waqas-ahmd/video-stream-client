@@ -15,10 +15,10 @@ function App() {
   return (
     <div style={styles.screen}>
       <button onClick={() => setPage("stream")} style={styles.button}>
-        STREAM
+       Start Stream
       </button>
       <button onClick={() => setPage("view")} style={styles.button}>
-        VIEW
+        Join Stream
       </button>
     </div>
   );

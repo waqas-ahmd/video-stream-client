@@ -4,19 +4,19 @@ import { styles } from "../styles";
 const API_ENDPOINT = process.env.NODE_ENV === "production" ? "https://intense-tor-63737.herokuapp.com" : "http://localhost:5001";
 
 const Stream = ({ home }) => {
+  const [streamStarted, setStreamStarted] = useState(false)
   var streamRef = useRef();
   const [id, setId] = useState("");
   const stream = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     const peer = createPeer();
     stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+    setStreamStarted(true)
     streamRef.current.srcObject = stream;
   };
 
   function createPeer() {
-    const peer = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.stunprotocol.org" }],
-    });
+    const peer = new RTCPeerConnection({iceServers: [{ urls: "stun:stun.stunprotocol.org" }]});
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
     return peer;
   }
@@ -32,16 +32,18 @@ const Stream = ({ home }) => {
   }
   return (
     <div style={styles.screen}>
-      <div style={styles.video}>
-        <video autoPlay ref={streamRef} />
-      </div>
-      <div>Video ID: {id}</div>
+      {streamStarted && <>
+        <div style={styles.video}>
+          <video autoPlay ref={streamRef} />
+        </div>
+        <div>Video ID: {id}</div>
+      </>}
       <button onClick={stream} style={styles.button}>
         START
       </button>
-      <button onClick={home} style={styles.button}>
-        Home
-      </button>
+      <div onClick={home} style={styles.back}>
+          Back
+      </div>
     </div>
   );
 };
