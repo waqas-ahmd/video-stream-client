@@ -30,6 +30,7 @@ const View = ({ home }) => {
       payload,
       id,
     });
+    console.log(payload)
     const desc = new RTCSessionDescription(data.sdp);
     peer.setRemoteDescription(desc).catch((e) => console.log(e));
   }
