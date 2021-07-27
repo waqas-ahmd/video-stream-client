@@ -8,10 +8,10 @@ const Stream = ({ home }) => {
   var streamRef = useRef();
   const [id, setId] = useState("");
   const stream = async () => {
+    setStreamStarted(true)
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     const peer = createPeer();
     stream.getTracks().forEach((track) => peer.addTrack(track, stream));
-    setStreamStarted(true)
     streamRef.current.srcObject = stream;
   };
 
